@@ -1,0 +1,126 @@
+#
+# <meta:header>
+#   <meta:licence>
+#     Copyright (c) 2022, ROE (http://www.roe.ac.uk/)
+#
+#     This information is free software: you can redistribute it and/or modify
+#     it under the terms of the GNU General Public License as published by
+#     the Free Software Foundation, either version 3 of the License, or
+#     (at your option) any later version.
+#
+#     This information is distributed in the hope that it will be useful,
+#     but WITHOUT ANY WARRANTY; without even the implied warranty of
+#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#     GNU General Public License for more details.
+#
+#     You should have received a copy of the GNU General Public License
+#     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#   </meta:licence>
+# </meta:header>
+#
+#zrq-notes-time
+#zrq-notes-indent
+#zrq-notes-crypto
+#zrq-notes-ansible
+#zrq-notes-osformat
+#zrq-notes-zeppelin
+#
+
+    Target:
+
+        Some notes on where next ..
+
+    Result:
+
+        Work in progress ...
+
+# -----------------------------------------------------
+
+    Flask
+    https://flask.palletsprojects.com/en/2.1.x/
+
+    Flask - GitHub
+    https://github.com/pallets/flask
+
+    Creating APIs with Flask
+    https://programminghistorian.org/en/lessons/creating-apis-with-python-and-flask
+
+# -----------------------------------------------------
+
+    Streaming data (out of date)
+    https://blog.al4.co.nz/2016/01/streaming-json-with-flask/
+
+    Streaming data
+    https://flask.palletsprojects.com/en/2.1.x/patterns/streaming/
+
+    NDJSON - Newline delimited JSON
+    https://github.com/ndjson/ndjson-spec
+
+        Not used here, but might be useful for later ..
+
+
+    Streaming JSON parser
+    https://pypi.org/project/json-stream/
+
+    Streaming JSON writer
+    https://pypi.org/project/jsonstreams/
+
+# -----------------------------------------------------
+
+    Flask-OIDC extension
+    https://flask-oidc.readthedocs.io/en/latest/
+    https://github.com/puiterwijk/flask-oidc
+
+    Use ESCAPE-IAM, GitHub or Drupal ?
+
+    Drupal - OAuth2 Server
+    https://www.drupal.org/node/1938218
+
+    oauth2-server-php
+    https://github.com/bshaffer/oauth2-server-php
+
+    OAuth 2.0 Server PHP
+    http://bshaffer.github.io/oauth2-server-php-docs/
+
+# -----------------------------------------------------
+
+    Tree of objects created by the user.
+
+    Starts at '/user/<name>'
+
+        Add container
+            <name>
+
+        Create node
+            <name>
+            <store> = [filesystem|database|rucio]
+
+        Update node
+            <name>
+            <store> = [filesystem|database|rucio] <- moves the data to a new location (async).
+
+        Import data to <node>
+            HTTP PUT URL
+
+        Export data from <node>
+            HTTP GET URL
+
+        Binary file view on data nodes
+
+        Plugin to access the data depending on <store> type.
+
+            filesystem
+            - path
+
+            database
+            - service
+              - host:user:pass (*) separate table
+            - schema
+
+            rucio
+            - service
+              - endpoint:user:pass (*) separate table
+            - domain
+            - object
+
+

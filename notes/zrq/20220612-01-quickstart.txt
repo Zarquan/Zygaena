@@ -1,0 +1,338 @@
+#
+# <meta:header>
+#   <meta:licence>
+#     Copyright (c) 2022, ROE (http://www.roe.ac.uk/)
+#
+#     This information is free software: you can redistribute it and/or modify
+#     it under the terms of the GNU General Public License as published by
+#     the Free Software Foundation, either version 3 of the License, or
+#     (at your option) any later version.
+#
+#     This information is distributed in the hope that it will be useful,
+#     but WITHOUT ANY WARRANTY; without even the implied warranty of
+#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#     GNU General Public License for more details.
+#
+#     You should have received a copy of the GNU General Public License
+#     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#   </meta:licence>
+# </meta:header>
+#
+#zrq-notes-time
+#zrq-notes-indent
+#zrq-notes-crypto
+#zrq-notes-ansible
+#zrq-notes-osformat
+#zrq-notes-zeppelin
+#
+
+    Target:
+
+        Step through the QuickStart example and learn the basics.
+
+    Result:
+
+        Work in progress ...
+
+
+# -----------------------------------------------------
+# Configure our environment.
+#[user@desktop]
+
+    cat > "${HOME}/Zygaena.env" << 'EOF'
+source "${HOME:?}/projects.env"
+ZYGAENA_REPO='git@github.com:Zarquan/Zygaena.git'
+ZYGAENA_HOME="${PROJECTS_ROOT}/ESCAPE/Zygaena"
+ZYGAENA_CODE="${ZYGAENA_HOME:?}/github-zrq"
+EOF
+
+
+# -----------------------------------------------------
+# Install the Flask framework
+#[user@desktop]
+
+    pip install Flask
+
+--START--
+....
+....
+Successfully installed
+    Flask-2.1.2
+    Werkzeug-2.1.2
+    itsdangerous-2.1.2
+--END--
+
+
+# -----------------------------------------------------
+# Quickstart test ....
+#[user@desktop]
+
+    source "${HOME}/Zygaena.env"
+    pushd "${ZYGAENA_CODE:?}"
+
+cat > hello.py << 'EOF'
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.route("/")
+def hello_world():
+    return "<p>Hello, World!</p>"
+EOF
+
+        export FLASK_APP=hello
+        flask run
+
+    popd
+
+
+--START--
+....
+127.0.0.1 - - [12/Jun/2022 15:04:10] "GET / HTTP/1.1" 200 -
+....
+--END--
+
+
+# -----------------------------------------------------
+# Application example, app factory ..
+# https://flask.palletsprojects.com/en/2.1.x/tutorial/factory/
+#[user@desktop]
+
+    source "${HOME}/Zygaena.env"
+    pushd "${ZYGAENA_CODE:?}"
+
+        mkdir 'flaskr'
+
+        gedit 'flaskr/__init__.py' &
+            ....
+            ....
+
+        export FLASK_APP=flaskr
+        export FLASK_ENV=development
+        flask run
+
+    popd
+
+--START--
+ * Serving Flask app 'flaskr' (lazy loading)
+ * Environment: development
+ * Debug mode: on
+ * Running on http://127.0.0.1:5000 (Press CTRL+C to quit)
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 671-505-161
+....
+....
+127.0.0.1 - - [12/Jun/2022 16:36:04] "GET /hello HTTP/1.1" 200 -
+....
+--END--
+
+
+# -----------------------------------------------------
+# Application example, sqlite database ..
+# https://flask.palletsprojects.com/en/2.1.x/tutorial/database/
+#[user@desktop]
+
+    source "${HOME}/Zygaena.env"
+    pushd "${ZYGAENA_CODE:?}"
+
+        gedit 'flaskr/db.py' &
+            ....
+            ....
+
+        flask init-db
+
+
+    popd
+
+--START--
+Initialized the database.
+--END--
+
+
+        cat instance/flaskr.sqlite
+
+--START--
+���otablepostpostCREATE TABLE post (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  author_id INTEGER NOT NULL,
+  created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  title TEXT NOT NULL,
+  body TEXT NOT NULL,
+  FOREIGN KEY (author_id) REFERENCES user (id)
+  )P++Ytablesqlite_sequencesqlite_sequenceCREATE TABLE sqlite_sequence(name,seq)��tableuseruserCREATE TABLE user (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  username TEXT UNIQUE NOT NULL,
+  password TEXT NOT NULL
+  )';indexsqlite_autoindex_user_1user
+--END--
+
+
+# -----------------------------------------------------
+# Application example, views ..
+# https://flask.palletsprojects.com/en/2.1.x/tutorial/views/
+#[user@desktop]
+
+    source "${HOME}/Zygaena.env"
+    pushd "${ZYGAENA_CODE:?}"
+
+        mkdir flaskr/templates
+
+        gedit 'flaskr/auth.py' &
+            ....
+            ....
+
+
+        gedit flaskr/templates/base.html &
+            ....
+            ....
+
+
+        gedit flaskr/templates/auth/register.html &
+            ....
+            ....
+
+
+        gedit flaskr/templates/auth/login.html &
+            ....
+            ....
+
+        export FLASK_APP=flaskr
+        export FLASK_ENV=development
+        flask run
+
+--START--
+ * Serving Flask app 'flaskr' (lazy loading)
+ * Environment: development
+ * Debug mode: on
+ * Running on http://127.0.0.1:5000 (Press CTRL+C to quit)
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 671-505-161
+....
+....
+--END--
+
+
+
+    firefox \
+        --new-window \
+        'http://127.0.0.1:5000/auth/register'
+
+--START--
+....
+....
+127.0.0.1 - - [13/Jun/2022 03:27:07] "GET /auth/register HTTP/1.1" 200 -
+127.0.0.1 - - [13/Jun/2022 03:27:08] "GET /static/style.css HTTP/1.1" 404 -
+127.0.0.1 - - [13/Jun/2022 03:27:26] "POST /auth/register HTTP/1.1" 302 -
+127.0.0.1 - - [13/Jun/2022 03:27:26] "GET /auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [13/Jun/2022 03:27:27] "GET /static/style.css HTTP/1.1" 404 -
+127.0.0.1 - - [13/Jun/2022 03:27:38] "POST /auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [13/Jun/2022 03:27:38] "GET /static/style.css HTTP/1.1" 404 -
+127.0.0.1 - - [13/Jun/2022 03:27:49] "POST /auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [13/Jun/2022 03:27:49] "GET /static/style.css HTTP/1.1" 404 -
+127.0.0.1 - - [13/Jun/2022 03:27:57] "POST /auth/login HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/home/Zarquan/.local/lib/python3.10/site-packages/flask/app.py", line 2095, in __call__
+    return self.wsgi_app(environ, start_response)
+  ....
+  ....
+werkzeug.routing.BuildError: Could not build url for endpoint 'index'. Did you mean 'auth.login' instead?
+--END--
+
+
+# -----------------------------------------------------
+# Application example, static files ..
+# https://flask.palletsprojects.com/en/2.1.x/tutorial/static/
+#[user@desktop]
+
+    source "${HOME}/Zygaena.env"
+    pushd "${ZYGAENA_CODE:?}"
+
+        mkdir flaskr/static
+
+        gedit flaskr/static/style.css &
+            ....
+            ....
+
+
+# -----------------------------------------------------
+# Application example, blog blueprint ..
+# https://flask.palletsprojects.com/en/2.1.x/tutorial/static/
+#[user@desktop]
+
+    source "${HOME}/Zygaena.env"
+    pushd "${ZYGAENA_CODE:?}"
+
+        gedit flaskr/blog.py &
+            ....
+            ....
+
+
+        mkdir flaskr/templates/blog
+        gedit flaskr/templates/blog/index.html &
+            ....
+            ....
+
+
+        gedit flaskr/templates/blog/create.html &
+            ....
+            ....
+
+
+        gedit flaskr/templates/blog/update.html &
+            ....
+            ....
+
+
+# -----------------------------------------------------
+# Application example, make it installable ..
+# https://flask.palletsprojects.com/en/2.1.x/tutorial/install/
+#[user@desktop]
+
+    source "${HOME}/Zygaena.env"
+    pushd "${ZYGAENA_CODE:?}"
+
+
+        gedit flaskr/setup.py &
+            ....
+            ....
+
+
+        gedit flaskr/MANIFEST.in &
+            ....
+            ....
+
+
+        pip install -e flaskr/
+
+--START--
+Defaulting to user installation because normal site-packages is not writeable
+Obtaining file:///var/local/projects/ESCAPE/Zygaena/github-zrq/flaskr
+Requirement already satisfied: flask in /home/Zarquan/.local/lib/python3.10/site-packages (from flaskr==1.0.0) (2.1.2)
+Requirement already satisfied: itsdangerous>=2.0 in /home/Zarquan/.local/lib/python3.10/site-packages (from flask->flaskr==1.0.0) (2.1.2)
+Requirement already satisfied: Jinja2>=3.0 in /usr/lib/python3.10/site-packages (from flask->flaskr==1.0.0) (3.0.1)
+Requirement already satisfied: click>=8.0 in /usr/lib/python3.10/site-packages (from flask->flaskr==1.0.0) (8.0.1)
+Requirement already satisfied: Werkzeug>=2.0 in /home/Zarquan/.local/lib/python3.10/site-packages (from flask->flaskr==1.0.0) (2.1.2)
+Requirement already satisfied: MarkupSafe>=2.0 in /usr/lib64/python3.10/site-packages (from Jinja2>=3.0->flask->flaskr==1.0.0) (2.0.0)
+Installing collected packages: flaskr
+  Running setup.py develop for flaskr
+Successfully installed flaskr
+--END--
+
+
+        pip list
+
+--START--
+Package             Version   Location
+------------------- --------- ----------------------------------------------------
+....
+filelock            3.0.12
+Flask               2.1.2
+flaskr              1.0.0     /var/local/projects/ESCAPE/Zygaena/github-zrq/flaskr
+fluidity-sm         0.2.0
+....
+--END--
+
+
+
